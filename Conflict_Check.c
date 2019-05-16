@@ -7,18 +7,12 @@
 #define new_conflict (struct conflict*)malloc(sizeof(struct conflict))
 #define new_child_queue_node (struct child_queue_node*)malloc(sizeof(struct child_queue_node))
 	 
-struct conflict* conflict_check(struct actor_node *head)
+struct conflict* conflict_check(struct conflict *conhead,struct tree_node *t)
 {
-  //  printf("\nConflict checking --------------START--------------------\n\n");
-	struct conflict *conhead=NULL,*conptr=NULL;
-	struct actor_node *p=head;
-
-	while(p!=NULL)//each actor
-	{
+   // printf("\nConflict checking for %s--------------START--------------------\n\n",t->str);
+	struct conflict *conptr=conhead;
+	if(conptr!=NULL)  while(conptr->next_conflict!=NULL)  conptr=conptr->next_conflict;
 		//printf("\n\n\n--------------inside %s------------",p->str);
-		struct tree_node *t=p->next;
-		while(t!=NULL)//each tree
-		{
 			int e=0,c=0;
 			//printf("\nTREE %s\n\n",t->str);			
 			int flag1;
@@ -317,22 +311,6 @@ struct conflict* conflict_check(struct actor_node *head)
 					}
 				/******************************sibling inconsistency***********************/
 
-					/*if(e)//OR entailment conflict node creation
-					{
-						//printf("\nConflict node OR E created");
-						struct conflict *new=new_conflict;
-						new->conflicting_pnode=t;
-						new->conflicting_cnode=ch;
-						new->con_flag=3;
-						new->next_conflict=NULL;
-						if (conhead==NULL)
-							conhead=conptr=new;
-						else
-						{
-							conptr->next_conflict=new;
-							conptr=conptr->next_conflict;
-						}
-					}*/
 					if(c)//HC conflict node creation
 					{
 						//printf("\nConflict node HC created");
@@ -371,10 +349,7 @@ struct conflict* conflict_check(struct actor_node *head)
 
 					ch=ch->next;
 				}
-			t=t->next;
-		}
-		p=p->next_actor;
-	}
 	//printf("\nConflict checking --------------END--------------------\n\n");
+	//int xyz;scanf("%d",&xyz);
  	return conhead;
 }
